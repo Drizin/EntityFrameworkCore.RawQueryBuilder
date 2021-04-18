@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>EntityFrameworkCore.RawQueryBuilder</id>
+    <version>1.0.0</version>
+    <title>EntityFrameworkCore.RawQueryBuilder</title>
+    <authors>Rick Drizin</authors>
+    <owners>Rick Drizin</owners>
+    <license type="expression">MIT</license>
+    <projectUrl>https://github.com/Drizin/EntityFrameworkCore.RawQueryBuilder</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Entity Framework Query Builder using String Interpolation</description>
+    <copyright>Copyright Rick Drizin 2021</copyright>
+    <tags>ef;efcore;query builder</tags>
+    <repository type="git" url="https://github.com/Drizin/EntityFrameworkCore.RawQueryBuilder" commit="xxx" />
+    <dependencies>
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="bin\Release\net472\EntityFrameworkCore.RawQueryBuilder.*" target="lib\net472" />
+    <file src="bin\Release\netstandard2.0\EntityFrameworkCore.RawQueryBuilder.*" target="lib\netstandard2.0" />
+  </files>
+</package>

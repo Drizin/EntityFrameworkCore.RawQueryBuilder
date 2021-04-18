@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.1</TargetFrameworks>
+    <Authors>Rick Drizin</Authors>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/Drizin/EntityFrameworkCore.RawQueryBuilder/</PackageProjectUrl>
+    <Description>Entity Framework Query Builder using String Interpolation</Description>
+    <Copyright>Rick Drizin</Copyright>
+    <Company>Rick Drizin</Company>
+    <Version>1.0.0</Version>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <PackageId>EntityFrameworkCore.RawQueryBuilder</PackageId>
+    <DocumentationFile>EntityFrameworkCore.RawQueryBuilder.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+	<PackageReference Include="Microsoft.EntityFrameworkCore" Version="[5,6]" />
+	<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="[5,6]" />
+  </ItemGroup>
+
+</Project>
