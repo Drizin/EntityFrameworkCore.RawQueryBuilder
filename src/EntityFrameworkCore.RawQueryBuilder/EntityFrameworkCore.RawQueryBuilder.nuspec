@@ -12,7 +12,7 @@
     <description>Entity Framework Query Builder using String Interpolation</description>
     <copyright>Copyright Rick Drizin 2021</copyright>
     <tags>ef;efcore;query builder</tags>
-    <repository type="git" url="https://github.com/Drizin/EntityFrameworkCore.RawQueryBuilder" commit="xxx" />
+    <repository type="git" url="https://github.com/Drizin/EntityFrameworkCore.RawQueryBuilder" commit="eb4e72baa8b76be96ecb2a83b26d4efd7b2f2d26" />
     <dependencies>
     </dependencies>
   </metadata>
