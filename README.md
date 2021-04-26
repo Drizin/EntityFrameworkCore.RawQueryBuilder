@@ -19,17 +19,13 @@ var context = new AdventureWorksDbContext(); // your DbContext
 // Your "template" query
 // Similar to FromSqlInterpolated, but later you can modify 
 // the query and add more conditions
-var q = context.Products.RawQueryBuilder(
-	$@"SELECT ProductId, Name, ListPrice, Weight
-	FROM [Production].[Product]
-	/**where**/
-	ORDER BY ProductId
-	");
+var q = context.Products
+  .RawQueryBuilder($@"SELECT * FROM Product WHERE 1=1");
 
 // Dynamically append conditions
-q.Where($"[ListPrice] <= {maxPrice}");
-q.Where($"[Weight] <= {maxWeight}");
-q.Where($"[Name] LIKE {search}");
+q.Append($"ListPrice <= {maxPrice}");
+q.Append($"Weight <= {maxWeight}");
+q.Append($"Name LIKE {search}");
 
 // After AsQueryable() you can use any EF extension
 // like ToList, ToListAsync, First, Count, Max, etc.. it's pure EF !
@@ -39,9 +35,7 @@ var products = q.AsQueryable().ToList();
 
 # Full Documentation and Features
 
-Pending...
-
-## Manual command building
+## Appending dynamic statements
 
 ```cs
 // start your basic query
@@ -90,7 +84,7 @@ q.Where($"ListPrice <= {maxPrice}");
 q.Where($"Weight <= {maxWeight}");
 q.Where($"Name LIKE {search}");
 
-// Query() will automatically build your query and replace your /**where**/ (if any filter was added)
+// AsQueryable() will automatically build your query and replace your /**where**/ (if any filter was added)
 var products = q.AsQueryable().ToList();
 ```
 
@@ -153,8 +147,8 @@ If you want to embed raw strings in your queries (don't want them to be parametr
 ```cs
 string tempTableName = "##Products" + Guid.NewGuid().ToString().Substring(0, 8);
 string name = "%Tesla%";
-context.Products.RawQueryBuilder($@"SELECT * FROM {tempTableName:raw} WHERE Name LIKE {name});
-").Execute();
+var products = context.Products.RawQueryBuilder($@"SELECT * FROM {tempTableName:raw} WHERE Name LIKE {name});")
+  .AsQueryable().ToList();
 ```
 
 One good reason to use the **raw** modifier is when using **nameof expression**, which allows us to "find references" for a column, "rename", etc:
@@ -249,23 +243,37 @@ RawQueryBuilder doesn't generate SQL statements (except for simple clauses which
 **Building raw dynamic filters in EF was a little cumbersome / ugly:**
 
 ```cs
-// https://www.pmichaels.net/2020/10/10/executing-dynamically-generated-sql-in-ef-core/
-string sql =
-    "select * " +
-    "from MyTable ";
- 
+string sql = "select * from Product where 1=1";
 var parameters = new List<SqlParameter>();
  
-int i = 1;
-foreach (var filter in filters)
+if (maxListPrice != null)
 {
-    sql += (i == 1 ? "and" : "where") + $" Field{i} = @filter{i} ";                    
-    parameters.Add(new SqlParameter($"@filter{i++}", filter));
+  sql += $" and ListPrice <= @MaxListPrice";
+  parameters.Add(new SqlParameter("@MaxListPrice", maxListPrice));
 }
+if (!string.IsNullOrEmpty(productName))
+{
+  sql += $" and ProductName LIKE @ProductName";
+  parameters.Add(new SqlParameter("@ProductName", "%" + productName + "%"));
+}
+// etc.
  
-var result = _paymentsDbContext.MyTable
-    .FromSqlRaw(sql, parameters.ToArray())
-    .ToList();
+var products = context.Products
+  .FromSqlRaw(sql, parameters.ToArray())
+  .ToList();
+```
+
+Now it's as easy as this:
+
+```cs
+var q = context.Products.RawQueryBuilder(@"SELECT * FROM Product /**where**/");
+
+if (!string.IsNullOrEmpty(productName))
+  q.Where($"ProductName LIKE {"%" + productName + "%"}");
+if (maxListPrice != null)
+  q.Where($"ListPrice <= {maxListPrice}");
+
+var products = q.AsQueryable().ToList();
 ```
 
 
