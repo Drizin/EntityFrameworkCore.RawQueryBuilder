@@ -13,6 +13,8 @@ namespace EntityFrameworkCore.RawQueryBuilder.Tests
 {
     public class QueryBuilderTests : BaseTests
     {
+        bool _realDatabaseTest = true;
+
         string expected = @"SELECT ProductId, Name, ListPrice, Weight
 FROM [Production].[Product]
 WHERE [ListPrice] <= {0} AND [Weight] <= {1} AND [Name] LIKE {2}
@@ -50,8 +52,11 @@ ORDER BY ProductId
             //Assert.AreEqual(q.Parameters.Get<int>("p1"), maxWeight);
             //Assert.AreEqual(q.Parameters.Get<string>("p2"), search);
 
-            //var products = q.AsQueryable().ToList();
-            //Assert.That(products.Any());
+            if (_realDatabaseTest)
+            {
+                var products = q.AsQueryable().ToList();
+                Assert.That(products.Any());
+            }
         }
     }
 }

@@ -50,8 +50,8 @@ ORDER BY ProductId
             //Assert.AreEqual(q.Parameters.Get<int>("p1"), maxWeight);
             //Assert.AreEqual(q.Parameters.Get<string>("p2"), search);
 
-            //var products = q.AsQueryable().ToList();
-            //Assert.That(products.Any());
+            var products = q.AsQueryable().ToList();
+            Assert.That(products.Any());
         }
 
 

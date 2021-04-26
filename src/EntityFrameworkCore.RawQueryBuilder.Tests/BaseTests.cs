@@ -15,11 +15,12 @@ namespace EntityFrameworkCore.RawQueryBuilder.Tests
         [SetUp]
         public void Setup()
         {
-            var context = new AdventureWorksDbContext();
+            string connectionString = "Server=WIN10VM2021\\SQLEXPRESS; Database=AdventureWorks2019; Integrated Security=True";
+            var opts = SqlServerDbContextOptionsExtensions.UseSqlServer(new DbContextOptionsBuilder<AdventureWorksDbContext>(), connectionString).Options;
+            var context = new AdventureWorksDbContext(opts);
             dbSet = context.Products;
-
-            //TODO: integration tests with real database
         }
+
         #endregion
 
     }
